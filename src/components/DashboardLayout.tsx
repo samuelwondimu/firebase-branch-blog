@@ -80,7 +80,7 @@ export const DashboardLayout: FC = () => {
           {setttingsAdmin.map((setting) => (
             <ListItem button key={setting.to} component={Link} to={setting.to}>
               <ListItemIcon>{setting.icon}</ListItemIcon>
-              <ListItemText primary={setting.name} />
+              {setting.name}
             </ListItem>
           ))}
         </List>

@@ -1,5 +1,5 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import { CenterBox, DashboardLayout, Navbar } from "./components";
+import { DashboardLayout, Navbar } from "./components";
 import {
   SignIn,
   SignUp,
@@ -9,10 +9,7 @@ import {
   ForgotPassword,
   AdminUsers,
 } from "./screens";
-
-function NotFound() {
-  return <CenterBox>not found 404</CenterBox>;
-}
+import { NotFound } from "./screens/NotFound";
 
 function App() {
   return (

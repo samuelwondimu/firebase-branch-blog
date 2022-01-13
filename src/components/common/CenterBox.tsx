@@ -10,7 +10,7 @@ export const CenterBox: React.FC = ({ children }) => {
       alignItems="center"
       flexDirection="column"
       width="100%"
-      height="90vh"
+      height="85vh"
     >
       {children}
     </Box>

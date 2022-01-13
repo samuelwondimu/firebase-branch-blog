@@ -92,7 +92,7 @@ export const AdminUsers: FC = () => {
   ];
 
   return (
-    <Paper elevation={0}>
+    <Paper>
       <Box
         sx={{
           height: "85vh",
