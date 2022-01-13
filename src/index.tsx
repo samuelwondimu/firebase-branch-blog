@@ -1,14 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import { auth, FieldValue, fireStore, storage } from "./lib/firebase";
-import FirebaseContext from "./contexts/firebase";
+import { ProviderAuth } from "./hooks/user-auth";
 
 ReactDOM.render(
   <React.StrictMode>
-    <FirebaseContext.Provider value={{ auth, FieldValue, fireStore, storage }}>
+    <ProviderAuth>
       <App />
-    </FirebaseContext.Provider>
+    </ProviderAuth>
   </React.StrictMode>,
   document.getElementById("root")
 );
