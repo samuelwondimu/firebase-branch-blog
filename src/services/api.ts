@@ -41,10 +41,10 @@ export const api = {
 
   viewsRef: collection(fireStore, "ViewsData"),
 
-  blogsDescriptionRef: collection(fireStore, "blogsDescription"),
+  blogsRef: collection(fireStore, "blogs"),
 
-  blogDescriptionByIdRef: (blogId: string | undefined) =>
-    doc(fireStore, "blogsDescription", `${blogId}`),
+  blogByIdRef: (blogId: string | undefined) =>
+    doc(fireStore, "blogs", `${blogId}`),
 
   blogDescriptionByBloggerIdRef: (bloggerId: string | undefined) =>
     query(

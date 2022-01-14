@@ -7,77 +7,62 @@ import {
   Grid,
   CardMedia,
   Box,
+  CardActions,
+  Button,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
 interface BlogDescriptionProps {
-  docId: string;
-  blogger: string;
-  bloggerId: string;
-  bloggerImage: string;
-  coverImage: string;
-  createdAt: any;
-  deleted: boolean;
-  description: string;
-  numComments: number;
-  numLikes: number;
-  numViews: number;
-  readTime: number;
-  status: boolean;
-  title: string;
+  blog: {
+    id?: string | undefined;
+    blogger: string | undefined;
+    bloggerId: string | undefined;
+    bloggerImage: string | undefined;
+    coverImage: string | undefined;
+    createdAt: any | undefined;
+    deleted: boolean | undefined;
+    description: string | undefined;
+    numComments: number | undefined;
+    numLikes: number | undefined;
+    numViews: number | undefined;
+    readTime: number | undefined;
+    status: boolean | undefined;
+    title: string | undefined;
+  };
 }
 
-export const BLogCard: FC<BlogDescriptionProps> = ({
-  docId,
-  title,
-  blogger,
-  bloggerId,
-  bloggerImage,
-  description,
-  coverImage,
-  numComments,
-  numLikes,
-  numViews,
-  readTime,
-  createdAt,
-}) => {
-  const date = createdAt && createdAt.toDate().toDateString();
-
+export const BlogCard: FC<BlogDescriptionProps> = ({ blog }) => {
   return (
-    <Grid item xs={12}>
-      <CardActionArea component={Link} to={`/blog/${docId}`}>
-        <Card sx={{ display: "flex" }}>
-          <CardContent sx={{ flex: 1 }}>
+    <Grid item xs={4}>
+      <CardActionArea component={Link} to={`/blog/${blog.id}`}>
+        <Card>
+          <CardMedia
+            component="img"
+            alt="green iguana"
+            height="140"
+            image={blog.coverImage}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              {blog.title}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="div" gutterBottom>
+              {blog.createdAt} by {blog.blogger}
+            </Typography>
             <Typography
-              component="h2"
-              variant="h5"
-              gutterBottom
-              fontWeight={"bold"}
-            >
-              {title.slice(0, 70)}
-            </Typography>
-            <Typography variant="body2" color="GrayText" sx={{ py: 1 }}>
-              {date} by {blogger}
-            </Typography>
-            <Box
-              component={Typography}
-              paragraph
-              fontSize={"1.2rem"}
+              variant="body2"
+              color="text.secondary"
               dangerouslySetInnerHTML={{
-                __html: `${description.slice(0, 150)}`,
+                __html: `${blog?.description?.slice(0, 300)}...`,
               }}
             />
           </CardContent>
-          <CardMedia
-            component="img"
-            sx={{
-              width: "240px",
-              height: "280px",
-              display: { xs: "none", sm: "block" },
-            }}
-            image={coverImage}
-            alt={"image"}
-          />
+          <CardActions>
+            <Button size="small">{blog.numLikes} likes</Button>
+            <Button size="small"> {blog.numComments} comments</Button>
+            <Button size="small">{blog.numViews} views</Button>
+            <Button size="small">{blog.readTime} min read</Button>
+          </CardActions>
         </Card>
       </CardActionArea>
     </Grid>

@@ -29,7 +29,7 @@ interface Block {
   };
 }
 
-export default function jsonToJSX(block: any[] | undefined) {
+export default function jsonToJSX(block: any | undefined) {
   return block?.map((block: Block) => {
     switch (block.type) {
       case "header":

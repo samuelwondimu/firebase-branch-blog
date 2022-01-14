@@ -72,19 +72,18 @@ export async function getUserByUserId(userId: string | undefined) {
 
 // get ALL Blogs
 export async function getBlogs(): Promise<BlogType[] | undefined> {
-  const result = await getDocs(api.blogsDescriptionRef);
+  const result = await getDocs(api.blogsRef);
 
   const blogs: BlogType[] | undefined = [];
 
   result.docs.map(async (data) => {
     const blog: BlogType = {
       id: data.id,
-      docId: data.id,
+      title: data?.data().title,
+      coverImage: data?.data().coverImage,
       blogger: data?.data().blogger,
       bloggerId: data?.data().bloggerId,
       bloggerImage: data?.data().bloggerImage,
-      coverImage: data?.data().coverImage,
-      createdAt: data?.data().createdAt.toDate(),
       deleted: data?.data().deleted,
       description: data?.data().description,
       numComments: data?.data().numComments,
@@ -92,8 +91,9 @@ export async function getBlogs(): Promise<BlogType[] | undefined> {
       numViews: data?.data().numViews,
       readTime: data?.data().readTime,
       likes: data?.data().likes,
+      mainBlog: data?.data().mainBlog,
       status: data?.data().status,
-      title: data?.data().title,
+      createdAt: data?.data().createdAt,
     };
     blogs.push(blog);
   });
@@ -105,50 +105,26 @@ export async function getBlogs(): Promise<BlogType[] | undefined> {
 export async function getBlogById(
   blogId: string | undefined
 ): Promise<BlogType | undefined> {
-  const result = await getDoc(api.blogDescriptionByIdRef(blogId));
-  const blogMeta = await getDoc(api.blogMetaByIdRef(blogId));
-  const comments = await getDocs(api.commentsByBlogIdRef(blogId));
+  const result = await getDoc(api.blogByIdRef(blogId));
 
-  if (result.exists() && blogMeta.exists() && comments) {
+  if (result.exists()) {
     return {
-      docId: result.id,
+      id: result.id,
+      title: result?.data().title,
+      coverImage: result?.data().coverImage,
       blogger: result?.data().blogger,
-      bloggerId: result.data().bloggerId,
-      bloggerImage: result.data().bloggerImage,
-      coverImage: result.data().coverImage,
-      createdAt: result.data().createdAt,
-      deleted: result.data().deleted,
-      description: result.data().description,
-      numComments: result.data().numComments,
-      numLikes: result.data().numLikes,
-      numViews: result.data().numViews,
-      readTime: result.data().readTime,
-      status: result.data().status,
-      title: result.data().title,
-      likes: result.data().likes,
-      // likes: likes.docs.map((like => ({like})))
-      mainBlog: {
-        docId: blogMeta.id,
-        blockData: blogMeta.data().blockData,
-        likes: blogMeta.data().likes,
-        createdAt: blogMeta.data().createdAt,
-      },
-      comments: comments.docs.map((comment) => ({
-        docId: comment.id,
-        commentText: comment.data().commentText,
-        blogId: comment.data().blogId,
-        avatar: comment.data().avatar,
-        userName: comment.data().username,
-        userId: comment.data().userId,
-        reply: comment.data().reply.map((thread: any) => ({
-          avatar: thread.avatar,
-          replyText: thread.reply,
-          userId: thread.userId,
-          userName: thread.user,
-          createdAt: thread.createdAt,
-        })),
-        createdAt: comment.data().createdAt,
-      })),
+      bloggerId: result?.data().bloggerId,
+      bloggerImage: result?.data().bloggerImage,
+      deleted: result?.data().deleted,
+      description: result?.data().description,
+      numComments: result?.data().numComments,
+      numLikes: result?.data().numLikes,
+      numViews: result?.data().numViews,
+      readTime: result?.data().readTime,
+      likes: result?.data().likes,
+      mainBlog: result?.data().mainBlog,
+      status: result?.data().status,
+      createdAt: result?.data().createdAt,
     };
   } else {
     return undefined;
@@ -160,7 +136,7 @@ export async function incrementNumberOfViews(
   blogId: string | undefined,
   userId: string | undefined
 ) {
-  return await updateDoc(api.blogDescriptionByIdRef(blogId), {
+  return await updateDoc(api.blogByIdRef(blogId), {
     numViews: increment(1),
   }).then(() => {
     addDoc(api.viewsRef, {
@@ -176,7 +152,7 @@ export async function likeBlog(
   userId: string | undefined,
   blogId: string | undefined
 ) {
-  return await updateDoc(api.blogDescriptionByIdRef(blogId), {
+  return await updateDoc(api.blogByIdRef(blogId), {
     likes: arrayUnion(userId),
     numLikes: increment(1),
   });
@@ -187,7 +163,7 @@ export async function unlikeBlog(
   userId: string | undefined,
   blogId: string | undefined
 ) {
-  return await updateDoc(api.blogDescriptionByIdRef(blogId), {
+  return await updateDoc(api.blogByIdRef(blogId), {
     likes: arrayRemove(userId),
     numLikes: increment(-1),
   });
@@ -270,7 +246,7 @@ export async function countNumberOfViews(blogId: string, userId: string) {
     blogId: blogId,
     createdAt: new Date().toISOString(),
   }).then(() => {
-    updateDoc(api.blogDescriptionByIdRef(blogId), {
+    updateDoc(api.blogByIdRef(blogId), {
       userId: userId,
       blogId: blogId,
       createdAt: new Date().toISOString(),
@@ -356,13 +332,13 @@ export async function updateUser(userId: string, status: boolean) {
  * @param blogId
  */
 export async function updateBlog(blogId: string, status: boolean) {
-  return await updateDoc(api.blogDescriptionByIdRef(blogId), {
+  return await updateDoc(api.blogByIdRef(blogId), {
     status: !status,
   });
 }
 
 export async function updateBlogDeleted(blogId: string, status: boolean) {
-  return await updateDoc(api.blogDescriptionByIdRef(blogId), {
+  return await updateDoc(api.blogByIdRef(blogId), {
     deleted: !status,
   });
 }
@@ -395,7 +371,7 @@ export async function getBlogsAnalytics(): Promise<{
   let totalComments = 0;
   let totalUsers = 0;
 
-  const blogs = await getDocs(api.blogsDescriptionRef);
+  const blogs = await getDocs(api.blogsRef);
   // eslint-disable-next-line array-callback-return
   blogs.docs.map((blog) => {
     totalBlogs += 1;
@@ -475,7 +451,6 @@ export async function getBlogByBloggerId(
   // eslint-disable-next-line array-callback-return
   blogs.docs.map((blog) => {
     const blogObj: BlogType = {
-      docId: blog.id,
       title: blog.data().title,
       description: blog.data().description,
       coverImage: blog.data().coverImage,
@@ -498,42 +473,36 @@ export async function getBlogByBloggerId(
 }
 
 // BLOGGER CREATE BLOG FUNCTIONS
-export async function uploadImage(file: any): Promise<string | undefined> {
+export async function uploadImage(file: any) {
   const uploadTask = uploadBytesResumable(api.sotrageRef(file), file, {
     contentType: "image/jpeg",
   });
+  uploadTask
+    .on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log(progress);
+      },
+      (error) => {
+        const errorMessage = error.message;
+        return errorMessage;
+      },
+      async () => {
+        const url = await getDownloadURL(uploadTask.snapshot.ref);
+        return url;
+      }
+    )
+    .toString();
 
-  let imageURL: string | undefined;
+  const imageUrl = await uploadTask.snapshot;
 
-  uploadTask.on(
-    "state_changed",
-    (snapshot) => {
-      const progres = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log(`Upload is ${progres}% done`);
-    },
-    (error) => {
-      console.log(error);
-    },
-    async () => {
-      await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        imageURL = downloadURL;
-      });
-    }
-  );
+  console.log(imageUrl.metadata.downloadTokens);
 
-  return imageURL;
+  return imageUrl.metadata;
 }
 
-export async function createBlog(blogDescription: BlogType, savedData: any) {
-  const blog = await addDoc(api.blogsDescriptionRef, blogDescription).then(
-    (res) => {
-      addDoc(api.blogsMetaByIdCollRef(res.id), {
-        id: res.id,
-        blockData: savedData.blocks,
-        likes: [],
-        createdAt: new Date().toISOString(),
-      });
-    }
-  );
-  return blog;
+export async function createBlog(blog: BlogType) {
+  await addDoc(api.blogsRef, blog);
 }

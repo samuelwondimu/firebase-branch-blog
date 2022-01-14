@@ -180,7 +180,7 @@ export const Navbar: FC = () => {
           </Toolbar>
         </AppBar>
       </Box>
-      <Box p={2} sx={{ backgroundColor: "#e2e2e2" }}>
+      <Box p={2} sx={{ backgroundColor: "#e2e2e2", minHeight: '100vh' }}>
         <Outlet />
       </Box>
     </nav>
