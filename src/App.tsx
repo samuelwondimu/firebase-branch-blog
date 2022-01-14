@@ -8,6 +8,7 @@ import {
   CreateBlog,
   ForgotPassword,
   AdminUsers,
+  AdminBloggers,
 } from "./screens";
 import { NotFound } from "./screens/NotFound";
 
@@ -27,6 +28,7 @@ function App() {
           <Route path="/admin/" element={<DashboardLayout />}>
             <Route path="create-blog" element={<CreateBlog />} />
             <Route path="users" element={<AdminUsers />} />
+            <Route path="bloggers" element={<AdminBloggers />} />
             <Route path="*" element={<NotFound />} />
           </Route>
           <Route path="*" element={<NotFound />} />
