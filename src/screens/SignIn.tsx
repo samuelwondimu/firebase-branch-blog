@@ -40,7 +40,7 @@ export const SignIn: FC = () => {
   return (
     <>
       <CenterBox>
-        <Paper sx={{ p: 4, width: 500 }}>
+        <Paper sx={{ p: 4 }}>
           <Box component="form" onSubmit={handleSubmit(onSubmit)}>
             {error && (
               <Alert sx={{ width: "100%" }} severity="error">
