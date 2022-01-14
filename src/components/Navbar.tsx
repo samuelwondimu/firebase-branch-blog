@@ -34,7 +34,7 @@ export const Navbar: FC = () => {
     setAnchorElUser(null);
   };
 
-  const settings = ["Profile", "Account", "Dashboard", "Logout"];
+  // const settings = ["Profile", "Account", "Dashboard", "Logout"];
   const setttingsAdmin = [
     {
       name: "Dashboard",
@@ -67,14 +67,14 @@ export const Navbar: FC = () => {
       icon: <ChromeReaderModeIcon fontSize="small" />,
     },
   ];
-  const settingsBloggers = [
-    { name: "Create Blog", to: "/blogger/create-blog", icon: <CreateIcon /> },
-    {
-      name: "My Blogs",
-      to: "/blogger/my-blogs",
-      icon: <ChromeReaderModeIcon />,
-    },
-  ];
+  // const settingsBloggers = [
+  //   { name: "Create Blog", to: "/blogger/create-blog", icon: <CreateIcon /> },
+  //   {
+  //     name: "My Blogs",
+  //     to: "/blogger/my-blogs",
+  //     icon: <ChromeReaderModeIcon />,
+  //   },
+  // ];
 
   return (
     <nav>
