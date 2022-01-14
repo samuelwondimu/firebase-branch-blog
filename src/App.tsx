@@ -29,7 +29,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Route>
           <Route path="/admin/" element={<DashboardLayout />}>
-            <Route path="admin-blogs" element={<AdminBlogs />} />
+            <Route path="blogs" element={<AdminBlogs />} />
             <Route path="bloggers" element={<AdminBloggers />} />
             <Route path="create-blog" element={<CreateBlog />} />
             <Route path="dashboard" element={<AdminDashboard />} />

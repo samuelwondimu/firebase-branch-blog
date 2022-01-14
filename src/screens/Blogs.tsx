@@ -23,21 +23,6 @@ export const Blogs: FC = () => {
       <Container>
         <Grid container spacing={3}>
           {blogs.map((blog) => {
-            return <BlogCard key={blog.id}  blog={blog} />;
-          })}
-          {blogs.map((blog) => {
-            return <BlogCard key={blog.id} blog={blog} />;
-          })}
-          {blogs.map((blog) => {
-            return <BlogCard key={blog.id} blog={blog} />;
-          })}
-          {blogs.map((blog) => {
-            return <BlogCard key={blog.id} blog={blog} />;
-          })}
-          {blogs.map((blog) => {
-            return <BlogCard key={blog.id} blog={blog} />;
-          })}
-          {blogs.map((blog) => {
             return <BlogCard key={blog.id} blog={blog} />;
           })}
         </Grid>

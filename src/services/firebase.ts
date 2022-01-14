@@ -185,6 +185,10 @@ export async function addComment(
     userId: userId,
     reply: [],
     createdAt: new Date().toISOString(),
+  }).then(() => {
+    return updateDoc(api.blogByIdRef(blogId), {
+      numComments: increment(1),
+    });
   });
 }
 
@@ -242,14 +246,11 @@ export async function getComments(blogId: string): Promise<CommentType[]> {
 // update number of views
 export async function countNumberOfViews(blogId: string, userId: string) {
   return await addDoc(api.viewsRef, {
-    userId: userId,
     blogId: blogId,
     createdAt: new Date().toISOString(),
   }).then(() => {
     updateDoc(api.blogByIdRef(blogId), {
-      userId: userId,
-      blogId: blogId,
-      createdAt: new Date().toISOString(),
+      numViews: increment(1),
     });
   });
 }

@@ -93,13 +93,13 @@ export const CreateBlog: FC = () => {
           save
         </Button>
       </Stack>
-      <Box
-        sx={{
-          height: "80vh",
-          overflow: "scroll",
-        }}
-      >
-        <CenterBox>
+      <CenterBox>
+        <Box
+          sx={{
+            height: "80vh",
+            overflow: "scroll",
+          }}
+        >
           <Box sx={{ width: 650 }} alignItems={"center"}>
             <TextField
               placeholder="Title"
@@ -147,8 +147,8 @@ export const CreateBlog: FC = () => {
               }}
             />
           </Box>
-        </CenterBox>
-      </Box>
+        </Box>
+      </CenterBox>
     </Paper>
   );
 };

@@ -23,6 +23,7 @@ interface BlogDescriptionProps {
     description: string | undefined;
     numComments: number | undefined;
     numLikes: number | undefined;
+    likes: any[] | undefined;
     numViews: number | undefined;
     readTime: number | undefined;
     status: boolean | undefined;
@@ -62,7 +63,7 @@ export const BlogCard: FC<BlogDescriptionProps> = ({ blog }) => {
             />
           </CardContent>
           <CardActions>
-            <Button size="small">{blog.numLikes} likes</Button>
+            <Button size="small">{blog.likes?.length} likes</Button>
             <Button size="small"> {blog.numComments} comments</Button>
             <Button size="small">{blog.numViews} views</Button>
             <Button size="small">{blog.readTime} min read</Button>

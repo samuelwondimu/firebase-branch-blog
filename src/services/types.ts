@@ -1,5 +1,6 @@
 export type BlogType = {
   id?: string | undefined;
+  docId?: string | undefined;
   blogger: string | undefined;
   bloggerId: string | undefined;
   bloggerImage: string | undefined;
