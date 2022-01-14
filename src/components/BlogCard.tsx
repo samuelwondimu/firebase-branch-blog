@@ -32,7 +32,7 @@ interface BlogDescriptionProps {
 
 export const BlogCard: FC<BlogDescriptionProps> = ({ blog }) => {
   return (
-    <Grid item xs={4}>
+    <Grid item xs={12} md={4}>
       <CardActionArea component={Link} to={`/blog/${blog.id}`}>
         <Card>
           <CardMedia
@@ -45,7 +45,12 @@ export const BlogCard: FC<BlogDescriptionProps> = ({ blog }) => {
             <Typography gutterBottom variant="h5" component="div">
               {blog.title}
             </Typography>
-            <Typography variant="body2" color="textSecondary" component="div" gutterBottom>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              component="div"
+              gutterBottom
+            >
               {blog.createdAt} by {blog.blogger}
             </Typography>
             <Typography
