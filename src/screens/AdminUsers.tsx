@@ -6,10 +6,12 @@ import { getUsers } from "../services/firebase";
 
 export const AdminUsers: FC = () => {
   const [users, setUsers] = useState<UserType[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getUsers().then((users) => {
-      setUsers(users);
+      setUsers(users.filter((user) => user.role === "users"));
+      setLoading(false);
     });
   }, []);
 
@@ -39,7 +41,7 @@ export const AdminUsers: FC = () => {
       field: "role",
       headerName: "Role",
       width: 260,
-    }
+    },
   ];
 
   return (
@@ -49,7 +51,12 @@ export const AdminUsers: FC = () => {
           height: "85vh",
         }}
       >
-        <DataGrid style={{ padding: "15px" }} rows={users} columns={columns} />
+        <DataGrid
+          style={{ padding: "15px" }}
+          rows={users}
+          columns={columns}
+          loading={loading}
+        />
       </Box>
     </Paper>
   );

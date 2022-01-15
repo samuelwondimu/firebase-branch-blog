@@ -13,6 +13,7 @@ import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { Comment } from "../components";
+import { LoadingIndicator } from "../components/LoadingIndicator";
 import jsonToJSX from "../helpers/jsonToJSX";
 import { useAuth } from "../hooks/user-auth";
 import {
@@ -29,6 +30,7 @@ export const BlogById: FC = () => {
   const id = useParams().id;
   const auth = useAuth();
   const [blog, setBlog] = useState<BlogType>();
+  const [loading, setLoading] = useState<boolean>(true);
   const [comments, setComments] = useState<CommentType[]>([]);
 
   const {
@@ -83,8 +85,14 @@ export const BlogById: FC = () => {
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     getBlogById(id).then((blog) => {
-      setBlog(blog);
+      if (blog) {
+        setBlog(blog);
+        setLoading(false);
+      }
+      setLoading(false);
     });
 
     getComments(`${id}`).then((comments) => {
@@ -94,80 +102,94 @@ export const BlogById: FC = () => {
     });
 
     countNumberOfViews(`${id}`, `${auth?.user?.uid}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
     <>
       <Container>
-        <Paper sx={{ p: 2, pb: 2 }}>
-          <Typography
-            variant="h3"
-            component="h1"
-            gutterBottom
-            fontWeight={"bold"}
-            sx={{ fontSize: { xs: "2rem" } }}
-          >
-            {blog?.title}
-          </Typography>
-          <Box
-            sx={{
-              height: 300,
-              width: "100%",
-              mb: 3,
-              backgroundSize: "cover",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              backgroundImage: `url(${blog?.coverImage})`,
-            }}
-          />
-          {blog?.mainBlog && jsonToJSX(blog?.mainBlog)}
-          <Stack direction={"row"} spacing={2}>
-            <Button
-              size="small"
-              variant="contained"
-              color="error"
-              startIcon={<Favorite />}
-              onClick={handleLike}
-            >
-              {blog?.likes?.length} likes
-            </Button>
-            <Button size="small" startIcon={<CommentBankOutlined />} disabled>
-              {blog?.comments?.length} comments
-            </Button>
-          </Stack>
-        </Paper>
+        {loading && (
+          <>
+            <LoadingIndicator />
+          </>
+        )}
+        {blog && (
+          <>
+            <Paper sx={{ p: 2, pb: 2 }}>
+              <Typography
+                variant="h3"
+                component="h1"
+                gutterBottom
+                fontWeight={"bold"}
+                sx={{ fontSize: { xs: "2rem" } }}
+              >
+                {blog?.title}
+              </Typography>
+              <Box
+                sx={{
+                  height: 300,
+                  width: "100%",
+                  mb: 3,
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center",
+                  backgroundImage: `url(${blog?.coverImage})`,
+                }}
+              />
+              {blog?.mainBlog && jsonToJSX(blog?.mainBlog)}
+              <Stack direction={"row"} spacing={2}>
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="error"
+                  startIcon={<Favorite />}
+                  onClick={handleLike}
+                >
+                  {blog?.likes?.length} likes
+                </Button>
+                <Button
+                  size="small"
+                  startIcon={<CommentBankOutlined />}
+                  disabled
+                >
+                  {blog?.comments?.length} comments
+                </Button>
+              </Stack>
+            </Paper>
 
-        <Paper sx={{ mt: 2, p: 2 }}>
-          <Typography variant="h6" gutterBottom fontWeight={"bold"}>
-            Comments
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-            {errors?.email && (
-              <Alert sx={{ width: "100%" }} severity="error">
-                {errors?.email?.message}
-              </Alert>
-            )}
-            <TextField
-              fullWidth
-              multiline
-              rows={4}
-              {...register("comment", {
-                required: "Required",
-              })}
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              sx={{ mt: 2 }}
-            >
-              Comment
-            </Button>
-          </Box>
-          {comments.map((comment) => (
-            <Comment key={comment.docId} comment={comment} />
-          ))}
-        </Paper>
+            <Paper sx={{ mt: 2, p: 2 }}>
+              <Typography variant="h6" gutterBottom fontWeight={"bold"}>
+                Comments
+              </Typography>
+              <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+                {errors?.email && (
+                  <Alert sx={{ width: "100%" }} severity="error">
+                    {errors?.email?.message}
+                  </Alert>
+                )}
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={4}
+                  {...register("comment", {
+                    required: "Required",
+                  })}
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  sx={{ mt: 2 }}
+                >
+                  Comment
+                </Button>
+              </Box>
+              {comments.map((comment) => (
+                <Comment key={comment.docId} comment={comment} />
+              ))}
+            </Paper>
+          </>
+        )}
       </Container>
     </>
   );

@@ -20,6 +20,7 @@ import { useForm } from "react-hook-form";
 export const AdminBloggers: FC = () => {
   const [users, setUsers] = useState<UserType[]>([]);
   const [bloggers, setBloggers] = useState<UserType[]>([]);
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [selectedUser, setSelectedUser] = useState<any>();
@@ -67,6 +68,7 @@ export const AdminBloggers: FC = () => {
     getUsers().then((users) => {
       setUsers(users.filter((user) => user.role === "user"));
       setBloggers(users.filter((user) => user.role === "blogger"));
+      setLoading(false);
     });
   }, []);
 
@@ -113,6 +115,7 @@ export const AdminBloggers: FC = () => {
           components={{
             Toolbar: CustomToolbar,
           }}
+          loading={loading}
         />
 
         {/* modal for role change */}

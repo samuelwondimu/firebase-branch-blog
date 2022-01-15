@@ -1,5 +1,6 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { DashboardLayout, Navbar } from "./components";
+import PrivateRoute from "./routes/PrivateRoutes";
 import {
   SignIn,
   SignUp,
@@ -28,14 +29,20 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="*" element={<NotFound />} />
           </Route>
-          <Route path="/admin/" element={<DashboardLayout />}>
-            <Route path="blogs" element={<AdminBlogs />} />
-            <Route path="bloggers" element={<AdminBloggers />} />
-            <Route path="create-blog" element={<CreateBlog />} />
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="my-blogs" element={<MyBlogs />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="*" element={<NotFound />} />
+          <Route element={<PrivateRoute routeRole="admin" />}>
+            <Route path="/admin/" element={<DashboardLayout />}>
+              <Route path="blogs" element={<AdminBlogs />} />
+              <Route path="bloggers" element={<AdminBloggers />} />
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Route>
+          <Route element={<PrivateRoute routeRole="blogger" />}>
+            <Route path="/blogger" element={<DashboardLayout />}>
+              <Route path="create-blog" element={<CreateBlog />} />
+              <Route path="my-blogs" element={<MyBlogs />} />
+            </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

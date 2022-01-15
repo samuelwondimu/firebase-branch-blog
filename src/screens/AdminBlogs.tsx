@@ -1,18 +1,22 @@
+import { FC, useEffect, useState } from "react";
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
-import { FC, useEffect, useState } from "react";
-import { getBlogs } from "../services/firebase";
+
+import { getBlogs, updateBlog } from "../services/firebase";
 import { BlogType } from "../services/types";
 
 export const AdminBlogs: FC = () => {
   const [blogs, setBlogs] = useState<BlogType[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getBlogs().then((res) => {
       if (res) {
         setBlogs(res);
+        setLoading(false);
       }
+      // setLoading(false);
     });
   }, []);
   const columns: GridColDef[] = [
@@ -31,10 +35,7 @@ export const AdminBlogs: FC = () => {
 
         return (
           <Stack direction="column">
-            <Typography
-              variant="body1"
-              fontWeight="bold"
-            >{`${blogTitle}`}</Typography>
+            <Typography variant="body1">{`${blogTitle}`}</Typography>
             <Typography variant="subtitle1" color="GrayText">
               By | {blogger} {moment(`${createdAt}`).fromNow()}
             </Typography>
@@ -71,15 +72,49 @@ export const AdminBlogs: FC = () => {
       width: 300,
       headerName: "actions",
       renderCell: (params) => {
+        const { status, id } = params.row;
+
+        async function unPublish() {
+          setLoading(true);
+          await updateBlog(id, status);
+          // update the data grid after new change
+          getBlogs().then((res) => {
+            if (res) {
+              setBlogs(res);
+            }
+          });
+          setLoading(false);
+        }
+
+        async function publish() {
+          setLoading(true);
+          await updateBlog(id, status);
+          // update the data grid after new change
+          getBlogs().then((res) => {
+            if (res) {
+              setBlogs(res);
+            }
+          });
+          setLoading(false);
+        }
+
         return (
           <Stack direction="row" spacing={2}>
-            <Button variant="contained">publish</Button>
-            <Button variant="contained">unPublish</Button>
+            {status ? (
+              <Button variant="contained" color="warning" onClick={unPublish}>
+                unPublish
+              </Button>
+            ) : (
+              <Button variant="contained" color="success" onClick={publish}>
+                publish
+              </Button>
+            )}
           </Stack>
         );
       },
     },
   ];
+
   return (
     <>
       <Paper>
@@ -93,6 +128,7 @@ export const AdminBlogs: FC = () => {
             rows={blogs}
             rowHeight={80}
             columns={columns}
+            loading={loading}
           />
         </Box>
       </Paper>
