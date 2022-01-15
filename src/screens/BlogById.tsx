@@ -37,6 +37,7 @@ export const BlogById: FC = () => {
     handleSubmit,
     register,
     formState: { errors },
+    reset,
   } = useForm();
 
   async function onSubmit(values: any) {
@@ -63,12 +64,12 @@ export const BlogById: FC = () => {
         },
       ].sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1))
     );
+    reset({ comment: "" });
   }
 
   async function handleLike() {
     if (!auth?.user) return;
     const liked = await blog?.likes?.includes(auth?.user?.uid);
-    console.log(liked);
     if (liked) {
       await unlikeBlog(`${auth?.user?.uid}`, id);
       blog?.likes &&

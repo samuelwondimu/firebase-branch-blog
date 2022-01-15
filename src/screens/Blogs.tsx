@@ -21,7 +21,6 @@ export const Blogs: FC = () => {
     });
   }, []);
 
-  console.log(blogs);
   return (
     <>
       <Container>

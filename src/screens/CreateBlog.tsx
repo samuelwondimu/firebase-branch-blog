@@ -54,30 +54,34 @@ export const CreateBlog: FC = () => {
       .save()
       .then((data: any) => data.blocks);
 
-    const { time, paragraph } = readTime(blockData);
+    if (blockData && title && imageUrl) {
+      const { time, paragraph } = readTime(blockData);
 
-    let blog: BlogType = {
-      id: "",
-      title: `${title}`,
-      coverImage: `${imageUrl}`,
-      blogger: `${auth?.user?.displayName}`,
-      bloggerId: `${auth?.user?.uid}`,
-      bloggerImage: `${auth?.user?.photoURL}`,
-      description: paragraph,
-      numComments: 0,
-      numLikes: 0,
-      numViews: 0,
-      readTime: time,
-      status: true,
-      createdAt: new Date().toDateString(),
-      deleted: false,
-      likes: [],
-      mainBlog: blockData,
-      comments: [],
-    };
+      let blog: BlogType = {
+        id: "",
+        title: `${title}`,
+        coverImage: `${imageUrl}`,
+        blogger: `${auth?.user?.displayName}`,
+        bloggerId: `${auth?.user?.uid}`,
+        bloggerImage: `${auth?.user?.photoURL}`,
+        description: paragraph,
+        numComments: 0,
+        numLikes: 0,
+        numViews: 0,
+        readTime: time,
+        status: false,
+        createdAt: new Date().toDateString(),
+        deleted: false,
+        likes: [],
+        mainBlog: blockData,
+        comments: [],
+      };
 
-    console.log(blog);
-    await createBlog(blog);
+      console.log(blog);
+      await createBlog(blog);
+    } else {
+      return;
+    }
   };
 
   return (

@@ -10,7 +10,7 @@ export const AdminUsers: FC = () => {
 
   useEffect(() => {
     getUsers().then((users) => {
-      setUsers(users.filter((user) => user.role === "users"));
+      setUsers(users.filter((user) => user.role === "user"));
       setLoading(false);
     });
   }, []);

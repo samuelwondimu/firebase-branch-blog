@@ -37,7 +37,6 @@ export const Blog: FC = () => {
       commentText: comment,
       avatar: "samuel wondimu",
     };
-    console.log(newComment);
     addComment(
       newComment.blogId,
       newComment.userId,

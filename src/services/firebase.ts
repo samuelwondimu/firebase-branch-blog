@@ -147,6 +147,11 @@ export async function incrementNumberOfViews(
   });
 }
 
+export async function getViews() {
+  const result = await getDocs(api.viewsRef);
+  return result.docs.map((doc) => doc.data());
+}
+
 // LIKE A BLOG
 export async function likeBlog(
   userId: string | undefined,
@@ -241,6 +246,11 @@ export async function getComments(blogId: string): Promise<CommentType[]> {
       comments.push(comment);
     });
   return comments;
+}
+
+export async function getAllComments() {
+  const result = await getDocs(api.commentsRef);
+  return result.docs.map((doc) => doc.data());
 }
 
 // update number of views

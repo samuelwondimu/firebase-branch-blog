@@ -3524,7 +3524,7 @@ cliui@^7.0.2:
     strip-ansi "^6.0.0"
     wrap-ansi "^7.0.0"
 
-clsx@^1.1.1:
+clsx@^1.1.0, clsx@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.1.1.tgz#98b3134f9abbdf23b2663491ace13c5c03a73188"
   integrity sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==
@@ -5228,7 +5228,7 @@ history@^5.2.0:
   dependencies:
     "@babel/runtime" "^7.7.6"
 
-hoist-non-react-statics@^3.3.1, hoist-non-react-statics@^3.3.2:
+hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.1, hoist-non-react-statics@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
   integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
@@ -6771,6 +6771,14 @@ normalize-url@^6.0.1:
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-6.1.0.tgz#40d0885b535deffe3f3147bec877d05fe4c5668a"
   integrity sha512-DlL+XwOy3NxAQ8xuC0okPgK46iuVNAK01YN7RueYBqqFeGsBjV9XmCAzAdgt+667bCl5kPh9EqKKDwnaPG1I7A==
 
+notistack@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/notistack/-/notistack-2.0.3.tgz#9007550e5cbc14df84d1d54e7a55ac0948eb59e8"
+  integrity sha512-krmVFtTO9kEY1Pa4NrbyexrjiRcV6TqBM2xLx8nuDea1g96Z/OZfkvVLmYKkTvoSJ3jyQntWK16z86ssW5kt4A==
+  dependencies:
+    clsx "^1.1.0"
+    hoist-non-react-statics "^3.3.0"
+
 npm-run-path@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/npm-run-path/-/npm-run-path-4.0.1.tgz#b7ecd1e5ed53da8e37a55e1c2269e0b97ed748ea"
@@ -7908,6 +7916,13 @@ react-error-overlay@^6.0.10:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.10.tgz#0fe26db4fa85d9dbb8624729580e90e7159a59a6"
   integrity sha512-mKR90fX7Pm5seCOfz8q9F+66VCc1PGsWSBxKbITjfKVQHMNF2zudxHnMdJiB1fRCb+XsbQV9sO9DCkgsMQgBIA==
 
+react-google-charts@^3.0.15:
+  version "3.0.15"
+  resolved "https://registry.yarnpkg.com/react-google-charts/-/react-google-charts-3.0.15.tgz#30759a470f48336e744fd383d054122b039a1ff2"
+  integrity sha512-78s5xOQOJvL+jIewrWQZEHtlVk+5Yh4zZy+ODA1on1o1FaRjKWXxoo4n4JQl1XuqkF/A9NWque3KqM6pMggjzQ==
+  dependencies:
+    react-load-script "^0.0.6"
+
 react-hook-form@^7.22.5:
   version "7.22.5"
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.22.5.tgz#85a135f3c5ae02ccf73096a03fc14b45607e9baa"
@@ -7922,6 +7937,11 @@ react-is@^17.0.1, react-is@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
+
+react-load-script@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/react-load-script/-/react-load-script-0.0.6.tgz#db6851236aaa25bb622677a2eb51dad4f8d2c258"
+  integrity sha512-aRGxDGP9VoLxcsaYvKWIW+LRrMOzz2eEcubTS4NvQPPugjk2VvMhow0wWTkSl7RxookomD1MwcP4l5UStg5ShQ==
 
 react-refresh@^0.11.0:
   version "0.11.0"

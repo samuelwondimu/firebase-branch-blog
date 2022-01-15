@@ -63,7 +63,9 @@ export const MyBlogs: FC = () => {
         const { status } = params.row;
         return (
           <>
-            <Box>{status}</Box>
+            <Box sx={{ bgcolor: status ? "green" : "yellow" }}>
+              {status ? "published" : "pending"}
+            </Box>
           </>
         );
       },

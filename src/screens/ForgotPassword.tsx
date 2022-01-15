@@ -24,7 +24,6 @@ export const ForgotPassword: FC = () => {
   } = useForm();
 
   async function onSubmit(values: any) {
-    console.log(values);
     try {
       await auth
         ?.passwordResetEmail(values.email)

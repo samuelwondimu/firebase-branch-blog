@@ -26,7 +26,6 @@ export const SignUp: FC = () => {
   } = useForm();
 
   async function onSubmit(values: any) {
-    console.log(values);
     try {
       await auth?.signup(
         values.email,

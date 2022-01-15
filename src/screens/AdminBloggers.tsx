@@ -32,7 +32,6 @@ export const AdminBloggers: FC = () => {
 
   // promote user function
   async function onSubmit(data: any) {
-    console.log(data, selectedUser);
     let userId = users.filter((user) => user.email === selectedUser)[0].id;
     if (data) {
       promoteUser(`${userId}`, data.role).then(() => {
@@ -116,6 +115,7 @@ export const AdminBloggers: FC = () => {
             Toolbar: CustomToolbar,
           }}
           loading={loading}
+          pageSize={12}
         />
 
         {/* modal for role change */}
