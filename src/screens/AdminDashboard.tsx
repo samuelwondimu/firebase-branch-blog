@@ -151,14 +151,13 @@ export const AdminDashboard: FC = () => {
     //   });
     // });
   }, []);
-  console.log(blogs);
   return (
     <>
       <Grid container spacing={3} justifyContent={"space-between"}>
         {/* Top Card data */}
         {topCardData.map((data) => {
           return (
-            <Grid item xs={12} sm={3}>
+            <Grid item xs={12} sm={3} key={data.title}>
               <Card
                 sx={{
                   display: "flex",
