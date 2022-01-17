@@ -12,14 +12,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { UserType } from "../services/types";
-import { getUsers, promoteUser } from "../services/firebase";
+import { BlogType, UserType } from "../services/types";
+import { getBlogs, getUsers, promoteUser } from "../services/firebase";
 import { SelectForm } from "../components";
 import { useForm } from "react-hook-form";
 
 export const AdminBloggers: FC = () => {
   const [users, setUsers] = useState<UserType[]>([]);
   const [bloggers, setBloggers] = useState<UserType[]>([]);
+  const [blogs, setBlogs] = useState<BlogType[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -69,6 +70,13 @@ export const AdminBloggers: FC = () => {
       setBloggers(users.filter((user) => user.role === "blogger"));
       setLoading(false);
     });
+
+    getBlogs().then((blogs) => {
+      if (blogs) {
+        setBlogs(blogs);
+        console.table(blogs);
+      }
+    });
   }, []);
 
   const columns: GridColDef[] = [
@@ -85,6 +93,17 @@ export const AdminBloggers: FC = () => {
             </Typography>
           </Box>
         );
+      },
+    },
+    {
+      field: "id",
+      headerName: "Blogs",
+      renderCell: (params) => {
+        const { id } = params.row;
+        const numberOfBlogs = blogs.filter(
+          (blog) => blog.bloggerId === id
+        ).length;
+        return <Typography>{`${numberOfBlogs}`}</Typography>;
       },
     },
     { field: "email", headerName: "E-mail", width: 250 },
@@ -115,7 +134,6 @@ export const AdminBloggers: FC = () => {
             Toolbar: CustomToolbar,
           }}
           loading={loading}
-          pageSize={12}
         />
 
         {/* modal for role change */}

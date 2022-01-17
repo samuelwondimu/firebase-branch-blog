@@ -1,4 +1,4 @@
-import { CommentBankOutlined, Favorite } from "@mui/icons-material";
+import { Favorite } from "@mui/icons-material";
 import {
   Alert,
   Box,
@@ -147,13 +147,6 @@ export const BlogById: FC = () => {
                   onClick={handleLike}
                 >
                   {blog?.likes?.length} likes
-                </Button>
-                <Button
-                  size="small"
-                  startIcon={<CommentBankOutlined />}
-                  disabled
-                >
-                  {blog?.comments?.length} comments
                 </Button>
               </Stack>
             </Paper>

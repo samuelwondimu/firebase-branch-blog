@@ -46,6 +46,15 @@ export const MyBlogs: FC = () => {
       },
     },
     {
+      field: "likes",
+      width: 100,
+      headerName: "Likes",
+      renderCell: (params) => {
+        const { likes } = params.row;
+        return <Typography>{`${likes.length}`}</Typography>;
+      },
+    },
+    {
       field: "numComments",
       width: 100,
       headerName: "Comments",
@@ -63,7 +72,14 @@ export const MyBlogs: FC = () => {
         const { status } = params.row;
         return (
           <>
-            <Box sx={{ bgcolor: status ? "green" : "yellow" }}>
+            <Box
+              sx={{
+                bgcolor: status ? "green" : "yellow",
+                p: 1,
+                px: 2,
+                fontWeight: "bold",
+              }}
+            >
               {status ? "published" : "pending"}
             </Box>
           </>

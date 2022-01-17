@@ -375,7 +375,7 @@ export async function getBlogsAnalytics(): Promise<{
   totalLikes: number;
   totalComments: number;
   totalUsers: number;
-}> {
+}> { 
   let totalBlogs = 0;
   let totalViews = 0;
   let totalLikes = 0;

@@ -7,7 +7,6 @@ import {
   Grid,
   CardMedia,
   CardActions,
-  Button,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
@@ -35,7 +34,7 @@ export const BlogCard: FC<BlogDescriptionProps> = ({ blog }) => {
   return (
     <Grid item xs={12} md={4}>
       <CardActionArea component={Link} to={`/blog/${blog.id}`}>
-        <Card>
+        <Card elevation={0}>
           <CardMedia
             component="img"
             alt="green iguana"
@@ -52,7 +51,7 @@ export const BlogCard: FC<BlogDescriptionProps> = ({ blog }) => {
               component="div"
               gutterBottom
             >
-              {blog.createdAt} by {blog.blogger}
+              {blog.createdAt} by {blog.blogger} | {blog.readTime} min read
             </Typography>
             <Typography
               variant="body2"
@@ -62,11 +61,14 @@ export const BlogCard: FC<BlogDescriptionProps> = ({ blog }) => {
               }}
             />
           </CardContent>
-          <CardActions>
-            <Button size="small">{blog.likes?.length} likes</Button>
-            <Button size="small"> {blog.numComments} comments</Button>
-            <Button size="small">{blog.numViews} views</Button>
-            <Button size="small">{blog.readTime} min read</Button>
+          <CardActions sx={{ ml: 1 }}>
+            <Typography fontWeight={"bold"}>
+              {blog.likes?.length} like |
+            </Typography>
+            <Typography fontWeight={"bold"}>
+              {blog.numComments} comments |
+            </Typography>
+            <Typography fontWeight={"bold"}>{blog.numViews} views </Typography>
           </CardActions>
         </Card>
       </CardActionArea>

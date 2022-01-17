@@ -15,8 +15,8 @@ import {
 import { Chart } from "react-google-charts";
 import {
   getBlogs,
-  getAllComments,
-  getViews,
+  // getAllComments,
+  // getViews,
   getUsers,
 } from "../services/firebase";
 import moment from "moment";
@@ -79,8 +79,8 @@ export const AdminDashboard: FC = () => {
               } else {
                 acc.push([date, 1]);
               }
-
               return acc;
+              
             }, [])
             .sort((a, b) => {
               return moment(a[0], "YYYY-MM-DD").diff(
@@ -135,21 +135,21 @@ export const AdminDashboard: FC = () => {
         ]);
       }
     });
-    getAllComments().then((res) => {
-      let comments = res;
-      getViews().then((res) => {
-        let views = res;
-        let anaylticsData = [
-          ["date", "views", "comments"],
-          ...views.filter((view) =>
-            moment(view.createdAt).isBetween(
-              moment().subtract(30, "days"),
-              moment()
-            )
-          ),
-        ];
-      });
-    });
+    // getAllComments().then((res) => {
+    //   let comments = res;
+    //   getViews().then((res) => {
+    //     let views = res;
+    //     let anaylticsData = [
+    //       ["date", "views", "comments"],
+    //       ...views.filter((view) =>
+    //         moment(view.createdAt).isBetween(
+    //           moment().subtract(30, "days"),
+    //           moment()
+    //         )
+    //       ),
+    //     ];
+    //   });
+    // });
   }, []);
   console.log(blogs);
   return (

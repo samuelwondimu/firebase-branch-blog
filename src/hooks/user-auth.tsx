@@ -19,7 +19,7 @@ interface AppContextInterface {
   user: User | null;
   fireStoreUser: CurrentUserType | null;
   signin: (email: string, password: string) => Promise<UserCredential>;
-  signinWithGmail?: () => Promise<UserCredential>;
+  signinWithGmail: () => Promise<UserCredential>;
   signup: (
     email: string,
     password: string,

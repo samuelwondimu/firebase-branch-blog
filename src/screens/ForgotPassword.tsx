@@ -16,6 +16,7 @@ import { useAuth } from "../hooks/user-auth";
 export const ForgotPassword: FC = () => {
   const auth = useAuth();
   const [error, setError] = useState("");
+  const [completed, setCompleted] = useState(false);
 
   const {
     handleSubmit,
@@ -24,18 +25,17 @@ export const ForgotPassword: FC = () => {
   } = useForm();
 
   async function onSubmit(values: any) {
-    try {
-      await auth
-        ?.passwordResetEmail(values.email)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((error) => {
-          setError(`${error.message}`);
-        });
-    } catch (error: any | unknown) {
-      setError(error.code);
-    }
+    await auth
+      ?.passwordResetEmail(values.email)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        setError(`${error.message}`);
+      })
+      .finally(() => {
+        setCompleted(true);
+      });
   }
 
   return (
@@ -58,39 +58,44 @@ export const ForgotPassword: FC = () => {
             </Alert>
           )}
 
-          <Paper
-            component="form"
-            onSubmit={handleSubmit(onSubmit)}
-            sx={{
-              p: "2px 4px",
-              display: "flex",
-              alignItems: "center",
-              width: 400,
-            }}
-          >
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              type="email"
-              placeholder="Your Email Here..."
-              {...register("email", {
-                required: "Required",
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "invalid email address",
-                },
-              })}
-            />
-            <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-            <IconButton
-              type="submit"
-              color="primary"
-              sx={{ p: "10px" }}
-              aria-label="directions"
-            >
-              <LockResetIcon />
-            </IconButton>
-            
-          </Paper>
+          {completed ? (
+            <Alert>Check your email to rest your password</Alert>
+          ) : (
+            <>
+              <Paper
+                component="form"
+                onSubmit={handleSubmit(onSubmit)}
+                sx={{
+                  p: "2px 4px",
+                  display: "flex",
+                  alignItems: "center",
+                  width: 400,
+                }}
+              >
+                <InputBase
+                  sx={{ ml: 1, flex: 1 }}
+                  type="email"
+                  placeholder="Your Email Here..."
+                  {...register("email", {
+                    required: "Required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "invalid email address",
+                    },
+                  })}
+                />
+                <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+                <IconButton
+                  type="submit"
+                  color="primary"
+                  sx={{ p: "10px" }}
+                  aria-label="directions"
+                >
+                  <LockResetIcon />
+                </IconButton>
+              </Paper>
+            </>
+          )}
         </Box>
       </CenterBox>
     </>
