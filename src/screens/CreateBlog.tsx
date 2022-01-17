@@ -18,7 +18,6 @@ import { BlogType } from "../services/types";
 import { useAuth } from "../hooks/user-auth";
 import { readTime } from "../helpers/readTIme";
 import { createBlog } from "../services/firebase";
-import { CenterBox } from "../components";
 import { useNavigate } from "react-router-dom";
 import { SaveAltOutlined } from "@mui/icons-material";
 
