@@ -23,7 +23,7 @@ export const Blogs: FC = () => {
 
   return (
     <>
-      <Container>
+      <Container maxWidth="xl">
         <Grid container spacing={3}>
           {loading && (
             <>
@@ -31,7 +31,7 @@ export const Blogs: FC = () => {
             </>
           )}
           {blogs.map((blog) => {
-            return <BlogCard key={blog.id} blog={blog} />;
+            return <BlogCard key={blog.id} test-id="blog-card" blog={blog} />;
           })}
         </Grid>
       </Container>
