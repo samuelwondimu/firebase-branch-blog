@@ -15,6 +15,9 @@ import {
   Typography,
   Paper,
   Container,
+  PaperProps,
+  Stack,
+  ListItemText,
 } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
 import ChromeReaderModeIcon from "@mui/icons-material/ChromeReaderMode";
@@ -22,11 +25,51 @@ import CreateIcon from "@mui/icons-material/Create";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/user-auth";
-import { Logout } from "@mui/icons-material";
+import { ClearAll, Logout, Notifications } from "@mui/icons-material";
+
+const menuPaperStyle: Partial<PaperProps<"div", {}>> | undefined = {
+  elevation: 0,
+  sx: {
+    overflow: "visible",
+    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+    mt: 1.5,
+    maxWidth: 400,
+    maxHeight: 600,
+    overflowY: 'scroll',
+    "& .MuiAvatar-root": {
+      width: 32,
+      height: 32,
+      ml: -0.5,
+      mr: 1,
+    },
+    "&:before": {
+      content: '""',
+      display: "block",
+      position: "absolute",
+      top: 0,
+      right: 14,
+      width: 10,
+      height: 10,
+      bgcolor: "background.paper",
+      transform: "translateY(-50%) rotate(45deg)",
+      zIndex: 0,
+    },
+  },
+};
 
 export const Navbar: FC = () => {
   const auth = useAuth();
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [anchorElNotification, setAnchorElNotification] =
+    useState<null | HTMLElement>(null);
+
+  const handleOpenNotificationMenu = (event: MouseEvent<HTMLElement>) => {
+    setAnchorElNotification(event.currentTarget);
+  };
+
+  const handleCloseNotificationMenu = () => {
+    setAnchorElNotification(null);
+  };
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -35,6 +78,46 @@ export const Navbar: FC = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const notifications = [
+    {
+      name: "John Doe",
+      seen: true,
+      message:
+        "you blog have been liked by samuel you blog have been liked by samuel you blog have been liked by samuel you blog have been liked by samuel you blog have been liked by samuel you blog have been liked by samuel",
+      date: "6 hours ago",
+    },
+
+    {
+      name: "John Doe",
+      seen: true,
+      message:
+        "you blog have been liked by samuel you blog have been liked by samuel",
+      date: "6 hours ago",
+    },
+
+    {
+      name: "John Doe",
+      seen: true,
+      message:
+        "you blog have been liked by samuel you blog have been liked by samuel blog have been liked by samuel blog have been liked by samuel ",
+      date: "6 hours ago",
+    },
+    {
+      name: "John Doe",
+      seen: false,
+      message:
+        "you blog have been liked by samuel you blog have been liked by samuel blog have been liked by samuel blog have been liked by samuel ",
+      date: "6 hours ago",
+    },
+    {
+      name: "John Doe",
+      seen: false,
+      message:
+        "you blog have been liked by samuel you blog have been liked by samuel blog have been liked by samuel blog have been liked by samuel ",
+      date: "6 hours ago",
+    },
+  ];
 
   // const settings = ["Profile", "Account", "Dashboard", "Logout"];
   const setttingsAdmin = [
@@ -77,7 +160,7 @@ export const Navbar: FC = () => {
             elevation={0}
             sx={{ borderRadius: 0, borderBottom: "1px solid #d3d3d3" }}
           >
-            <Container maxWidth={'xl'}>
+            <Container maxWidth={"xl"}>
               <Toolbar>
                 <Box sx={{ flexGrow: 1 }}>
                   <Button component={Link} to="/" variant="contained">
@@ -87,6 +170,84 @@ export const Navbar: FC = () => {
 
                 {auth?.user ? (
                   <>
+                    <Tooltip title="Notification" sx={{ mr: 2 }}>
+                      <IconButton
+                        aria-label="notification"
+                        onClick={handleOpenNotificationMenu}
+                      >
+                        <Notifications fontSize={"large"} />
+                      </IconButton>
+                    </Tooltip>
+
+                    <Menu
+                      open={Boolean(anchorElNotification)}
+                      onClose={handleCloseNotificationMenu}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      anchorEl={anchorElNotification}
+                      PaperProps={menuPaperStyle}
+                      sx={{ mt: "45px" }}
+                      id="notification-menu"
+                    >
+                      <Stack
+                        direction={"row"}
+                        sx={{
+                          justifyContent: "space-between",
+                          mx: 2,
+                          alignItems: "center",
+                        }}
+                      >
+                        <Typography>6 New Notifications</Typography>
+                        <IconButton aria-label="clear notification">
+                          <ClearAll />
+                        </IconButton>
+                      </Stack>
+                      <Divider />
+                      {notifications.map((notification, index) => {
+                        return (
+                          <Box
+                            sx={{
+                              px: 2,
+                              m: 1,
+                              borderRadius: 2,
+                              py: 1,
+                              backgroundColor: notification.seen
+                                ? "#ff9e92"
+                                : "whiteSmoke",
+                            }}
+                          >
+                            <ListItemText>{notification.message}</ListItemText>
+                            <Typography>{notification.date}</Typography>
+                          </Box>
+                        );
+                      })}
+                      {notifications.map((notification, index) => {
+                        return (
+                          <Box
+                            sx={{
+                              px: 2,
+                              m: 1,
+                              borderRadius: 2,
+                              py: 1,
+                              backgroundColor: notification.seen
+                                ? "#ff9e92"
+                                : "whiteSmoke",
+                            }}
+                          >
+                            <ListItemText>{notification.message}</ListItemText>
+                            <Typography>{notification.date}</Typography>
+                          </Box>
+                        );
+                      })}
+                    </Menu>
+
                     <Tooltip title="Open settings">
                       <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                         <Avatar
@@ -97,7 +258,7 @@ export const Navbar: FC = () => {
                     </Tooltip>
                     <Menu
                       sx={{ mt: "45px" }}
-                      id="menu-appbar"
+                      id="menu-avatar"
                       anchorEl={anchorElUser}
                       anchorOrigin={{
                         vertical: "top",
@@ -108,32 +269,7 @@ export const Navbar: FC = () => {
                         vertical: "top",
                         horizontal: "right",
                       }}
-                      PaperProps={{
-                        elevation: 0,
-                        sx: {
-                          overflow: "visible",
-                          filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                          mt: 1.5,
-                          "& .MuiAvatar-root": {
-                            width: 32,
-                            height: 32,
-                            ml: -0.5,
-                            mr: 1,
-                          },
-                          "&:before": {
-                            content: '""',
-                            display: "block",
-                            position: "absolute",
-                            top: 0,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            bgcolor: "background.paper",
-                            transform: "translateY(-50%) rotate(45deg)",
-                            zIndex: 0,
-                          },
-                        },
-                      }}
+                      PaperProps={menuPaperStyle}
                       open={Boolean(anchorElUser)}
                       onClose={handleCloseUserMenu}
                     >
