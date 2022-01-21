@@ -34,6 +34,8 @@ const menuPaperStyle: Partial<PaperProps<"div", {}>> | undefined = {
     filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
     mt: 1.5,
     maxWidth: 400,
+    maxHeight: 600,
+    overflowY: 'scroll',
     "& .MuiAvatar-root": {
       width: 32,
       height: 32,
@@ -213,6 +215,26 @@ export const Navbar: FC = () => {
                           <Box
                             sx={{
                               px: 2,
+                              m: 1,
+                              borderRadius: 2,
+                              py: 1,
+                              backgroundColor: notification.seen
+                                ? "#ff9e92"
+                                : "whiteSmoke",
+                            }}
+                          >
+                            <ListItemText>{notification.message}</ListItemText>
+                            <Typography>{notification.date}</Typography>
+                          </Box>
+                        );
+                      })}
+                      {notifications.map((notification, index) => {
+                        return (
+                          <Box
+                            sx={{
+                              px: 2,
+                              m: 1,
+                              borderRadius: 2,
                               py: 1,
                               backgroundColor: notification.seen
                                 ? "#ff9e92"
