@@ -18,6 +18,7 @@ import {
   PaperProps,
   Stack,
   ListItemText,
+  ListItem,
 } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
 import ChromeReaderModeIcon from "@mui/icons-material/ChromeReaderMode";
@@ -25,7 +26,13 @@ import CreateIcon from "@mui/icons-material/Create";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/user-auth";
-import { ClearAll, Logout, Notifications } from "@mui/icons-material";
+import {
+  ClearAll,
+  Comment,
+  Favorite,
+  Logout,
+  Notifications,
+} from "@mui/icons-material";
 import { NotificationType } from "../services/types";
 import { getNotifications, updateNotification } from "../services/firebase";
 import moment from "moment";
@@ -136,7 +143,7 @@ export const Navbar: FC = () => {
           .sort(function (a, b) {
             var c: any = new Date(a.createdAt);
             var d: any = new Date(b.createdAt);
-            return  d - c;
+            return d - c;
           })
       );
     });
@@ -220,12 +227,27 @@ export const Navbar: FC = () => {
                                 : "#ff9e92",
                             }}
                           >
-                            <ListItemText>
-                              {notification.notificationMessage}
-                            </ListItemText>
-                            <Typography>
-                              {moment(`${notification.createdAt}`).fromNow()}
-                            </Typography>
+                            <ListItem>
+                              <ListItemIcon>
+                                {notification.type === "liked" ? (
+                                  <Favorite />
+                                ) : notification.type === "comment" ? (
+                                  <Comment />
+                                ) : notification.type === "newBlog" ? (
+                                  <CreateIcon />
+                                ) : (
+                                  <Notifications />
+                                )}
+                              </ListItemIcon>
+                              <ListItemText>
+                                {notification.notificationMessage}
+                                <Typography>
+                                  {moment(
+                                    `${notification.createdAt}`
+                                  ).fromNow()}
+                                </Typography>
+                              </ListItemText>
+                            </ListItem>
                           </Box>
                         );
                       })}
