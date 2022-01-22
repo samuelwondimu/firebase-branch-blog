@@ -27,7 +27,8 @@ import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/user-auth";
 import { ClearAll, Logout, Notifications } from "@mui/icons-material";
 import { NotificationType } from "../services/types";
-import { getNotifications } from "../services/firebase";
+import { getNotifications, updateNotification } from "../services/firebase";
+import moment from "moment";
 
 const menuPaperStyle: Partial<PaperProps<"div", {}>> | undefined = {
   elevation: 0,
@@ -82,7 +83,10 @@ export const Navbar: FC = () => {
     setAnchorElUser(null);
   };
 
-  async function updateNotification() {
+  function clearNotification() {
+    notifications.map(
+      async (notification) => await updateNotification(notification.id)
+    );
     setNotifications(
       notifications.map((notification) => ({
         ...notification,
@@ -125,9 +129,15 @@ export const Navbar: FC = () => {
   useEffect(() => {
     getNotifications(`${auth?.user?.uid}`).then((notifications) => {
       setNotifications(
-        notifications.filter(
-          (notification) => notification.receiverId === `${auth?.user?.uid}`
-        )
+        notifications
+          .filter(
+            (notification) => notification.receiverId === `${auth?.user?.uid}`
+          )
+          .sort(function (a, b) {
+            var c: any = new Date(a.createdAt);
+            var d: any = new Date(b.createdAt);
+            return  d - c;
+          })
       );
     });
   }, [auth]);
@@ -190,7 +200,7 @@ export const Navbar: FC = () => {
                         </Typography>
                         <IconButton
                           aria-label="clear notification"
-                          onClick={updateNotification}
+                          onClick={clearNotification}
                         >
                           <ClearAll />
                         </IconButton>
@@ -213,7 +223,9 @@ export const Navbar: FC = () => {
                             <ListItemText>
                               {notification.notificationMessage}
                             </ListItemText>
-                            <Typography>{`${notification.createdAt}`}</Typography>
+                            <Typography>
+                              {moment(`${notification.createdAt}`).fromNow()}
+                            </Typography>
                           </Box>
                         );
                       })}
