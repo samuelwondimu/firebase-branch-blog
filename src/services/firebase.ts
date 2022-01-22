@@ -131,22 +131,6 @@ export async function getBlogById(
   }
 }
 
-// increment number of views
-export async function incrementNumberOfViews(
-  blogId: string | undefined,
-  userId: string | undefined
-) {
-  return await updateDoc(api.blogByIdRef(blogId), {
-    numViews: increment(1),
-  }).then(() => {
-    addDoc(api.viewsRef, {
-      blogId,
-      userId,
-      createdAt: new Date().toISOString(),
-    });
-  });
-}
-
 export async function getViews() {
   const result = await getDocs(api.viewsRef);
   return result.docs.map((doc) => doc.data());
@@ -267,7 +251,7 @@ export async function countNumberOfViews(blogId: string, userId: string) {
 
 // create a notifications
 export async function createNotification(
-  type: string,
+  type: "liked" | "unliked" | "comment" | "newBlog" | "promotion",
   senderId: string,
   receiverId: string | undefined,
   notificationMessage: string
@@ -299,10 +283,9 @@ export async function updateNotification(notificationId: string | undefined) {
  * @returns
  */
 export async function getNotifications(
-  receiverId: string | undefined
-): Promise<NotificationType[] | undefined> {
-  const result = await getDocs(api.notificationByReceiverIdRef(receiverId));
-
+  receiverId: string
+): Promise<NotificationType[]> {
+  const result = await getDocs(api.notificationRef);
   const notifications: NotificationType[] = [];
 
   result.docs.map((data) => {
@@ -315,6 +298,7 @@ export async function getNotifications(
       seen: data.data().seen,
       createdAt: data.data().createdAt,
     };
+    console.log(notification);
     return notifications.push(notification);
   });
 
@@ -364,89 +348,6 @@ export async function promoteUser(userId: string, role: string) {
     role: role,
   });
 }
-
-/**
- * get Blogs analytics
- * @returns {Promise<{totalBlogs: number, totalViews: number, totalLikes: number, totalComments: number, totalUsers: number}>}
- */
-export async function getBlogsAnalytics(): Promise<{
-  totalBlogs: number;
-  totalViews: number;
-  totalLikes: number;
-  totalComments: number;
-  totalUsers: number;
-}> { 
-  let totalBlogs = 0;
-  let totalViews = 0;
-  let totalLikes = 0;
-  let totalComments = 0;
-  let totalUsers = 0;
-
-  const blogs = await getDocs(api.blogsRef);
-  // eslint-disable-next-line array-callback-return
-  blogs.docs.map((blog) => {
-    totalBlogs += 1;
-    totalViews += blog.data().numViews;
-    totalLikes += +blog.data().likes.length;
-    totalComments += blog.data().numComments;
-  });
-
-  const users = await getDocs(api.usersRef);
-  // eslint-disable-next-line array-callback-return
-  users.docs.map((user) => {
-    totalUsers += 1;
-  });
-  return {
-    totalBlogs: totalBlogs,
-    totalViews: totalViews,
-    totalLikes: totalLikes,
-    totalComments: totalComments,
-    totalUsers,
-  };
-}
-
-// /**
-//  * create a blog
-//  * @param {string} coverImage
-//  * @param {string} title
-//  * @param {string} description
-//  * @param {string} readTime
-//  * @param {object} currentUser
-//  * @param {Array} blocks
-//  */
-// export async function createBlog(coverImage: string, title: string, description: string, readTime: string, currentUser: User, blocks: any[]) {
-//   // try catch and return error message if any
-//   try {
-//     const blog = await addDoc(api.blogsDescriptionRef, {
-//       title: title,
-//       coverImage: coverImage,
-//       description: description,
-//       readTime: readTime,
-//       numLikes: 0,
-//       numViews: 0,
-//       blogger: currentUser.displayName,
-//       bloggerId: currentUser.uid,
-//       bloggerImage: currentUser.photoURL,
-//       numComments: 0,
-//       likes: [],
-//       deleted: false,
-//       status: false,
-//       createdAt: new Date().toISOString(),
-//     }).then((res) => {
-//       addDoc(api.blogsMetaByIdCollRef(res.id), {
-//         id: res.id,
-//         blockData: blocks,
-//         likes: [],
-//         createdAt: new Date().toISOString(),
-//       });
-//     });
-//     return blog;
-//   } catch (error) {
-//     return error;
-//   } finally {
-//     return null;
-//   }
-// }
 
 /**
  * get blogs for bloggers by there user UID

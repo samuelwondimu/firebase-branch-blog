@@ -19,6 +19,7 @@ import { useAuth } from "../hooks/user-auth";
 import {
   addComment,
   countNumberOfViews,
+  createNotification,
   getBlogById,
   getComments,
   likeBlog,
@@ -42,6 +43,7 @@ export const BlogById: FC = () => {
 
   async function onSubmit(values: any) {
     if (!auth?.user) return;
+
     await addComment(
       id,
       `${auth?.user?.uid}`,
@@ -49,6 +51,14 @@ export const BlogById: FC = () => {
       values.comment,
       `${auth?.user?.photoURL}`
     );
+
+    await createNotification(
+      "comment",
+      `${auth.user.uid}`,
+      `${blog?.bloggerId}`,
+      `${auth.user.displayName} commented on your blog ${blog?.title}`
+    );
+
     setComments(
       [
         ...comments,
@@ -64,6 +74,7 @@ export const BlogById: FC = () => {
         },
       ].sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1))
     );
+
     reset({ comment: "" });
   }
 
@@ -77,6 +88,12 @@ export const BlogById: FC = () => {
           ...blog,
           likes: blog?.likes?.filter((like) => like !== `${auth?.user?.uid}`),
         });
+      await createNotification(
+        "liked",
+        `${auth.user.uid}`,
+        `${blog?.bloggerId}`,
+        `${auth.user.displayName} Liked your blog ${blog?.title}`
+      );
       return;
     } else {
       await likeBlog(`${auth?.user?.uid}`, id);

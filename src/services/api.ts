@@ -76,7 +76,7 @@ export const api = {
   notificationByIdRef: (notificationId: string | undefined) =>
     doc(fireStore, "notifications", `${notificationId}`),
 
-  notificationByReceiverIdRef: (receiverId: string | undefined) =>
+  notificationByReceiverIdRef: (receiverId: string) =>
     query(
       collection(fireStore, "notifications"),
       where("receiverId", "==", `${receiverId}`)
