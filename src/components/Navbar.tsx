@@ -1,4 +1,4 @@
-import { FC, useState, MouseEvent } from "react";
+import { FC, useState, MouseEvent, useEffect } from "react";
 import {
   AppBar,
   Avatar,
@@ -26,6 +26,8 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/user-auth";
 import { ClearAll, Logout, Notifications } from "@mui/icons-material";
+import { NotificationType } from "../services/types";
+import { getNotifications } from "../services/firebase";
 
 const menuPaperStyle: Partial<PaperProps<"div", {}>> | undefined = {
   elevation: 0,
@@ -35,7 +37,7 @@ const menuPaperStyle: Partial<PaperProps<"div", {}>> | undefined = {
     mt: 1.5,
     maxWidth: 400,
     maxHeight: 600,
-    overflowY: 'scroll',
+    overflowY: "scroll",
     "& .MuiAvatar-root": {
       width: 32,
       height: 32,
@@ -59,6 +61,7 @@ const menuPaperStyle: Partial<PaperProps<"div", {}>> | undefined = {
 
 export const Navbar: FC = () => {
   const auth = useAuth();
+  const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [anchorElNotification, setAnchorElNotification] =
     useState<null | HTMLElement>(null);
@@ -79,47 +82,15 @@ export const Navbar: FC = () => {
     setAnchorElUser(null);
   };
 
-  const notifications = [
-    {
-      name: "John Doe",
-      seen: true,
-      message:
-        "you blog have been liked by samuel you blog have been liked by samuel you blog have been liked by samuel you blog have been liked by samuel you blog have been liked by samuel you blog have been liked by samuel",
-      date: "6 hours ago",
-    },
+  async function updateNotification() {
+    setNotifications(
+      notifications.map((notification) => ({
+        ...notification,
+        seen: true,
+      }))
+    );
+  }
 
-    {
-      name: "John Doe",
-      seen: true,
-      message:
-        "you blog have been liked by samuel you blog have been liked by samuel",
-      date: "6 hours ago",
-    },
-
-    {
-      name: "John Doe",
-      seen: true,
-      message:
-        "you blog have been liked by samuel you blog have been liked by samuel blog have been liked by samuel blog have been liked by samuel ",
-      date: "6 hours ago",
-    },
-    {
-      name: "John Doe",
-      seen: false,
-      message:
-        "you blog have been liked by samuel you blog have been liked by samuel blog have been liked by samuel blog have been liked by samuel ",
-      date: "6 hours ago",
-    },
-    {
-      name: "John Doe",
-      seen: false,
-      message:
-        "you blog have been liked by samuel you blog have been liked by samuel blog have been liked by samuel blog have been liked by samuel ",
-      date: "6 hours ago",
-    },
-  ];
-
-  // const settings = ["Profile", "Account", "Dashboard", "Logout"];
   const setttingsAdmin = [
     {
       name: "Dashboard",
@@ -150,6 +121,16 @@ export const Navbar: FC = () => {
       icon: <ChromeReaderModeIcon />,
     },
   ];
+
+  useEffect(() => {
+    getNotifications(`${auth?.user?.uid}`).then((notifications) => {
+      setNotifications(
+        notifications.filter(
+          (notification) => notification.receiverId === `${auth?.user?.uid}`
+        )
+      );
+    });
+  }, [auth]);
 
   return (
     <nav>
@@ -204,12 +185,18 @@ export const Navbar: FC = () => {
                           alignItems: "center",
                         }}
                       >
-                        <Typography>6 New Notifications</Typography>
-                        <IconButton aria-label="clear notification">
+                        <Typography>
+                          {notifications.length} Notifications
+                        </Typography>
+                        <IconButton
+                          aria-label="clear notification"
+                          onClick={updateNotification}
+                        >
                           <ClearAll />
                         </IconButton>
                       </Stack>
                       <Divider />
+
                       {notifications.map((notification, index) => {
                         return (
                           <Box
@@ -219,30 +206,14 @@ export const Navbar: FC = () => {
                               borderRadius: 2,
                               py: 1,
                               backgroundColor: notification.seen
-                                ? "#ff9e92"
-                                : "whiteSmoke",
+                                ? "whiteSmoke"
+                                : "#ff9e92",
                             }}
                           >
-                            <ListItemText>{notification.message}</ListItemText>
-                            <Typography>{notification.date}</Typography>
-                          </Box>
-                        );
-                      })}
-                      {notifications.map((notification, index) => {
-                        return (
-                          <Box
-                            sx={{
-                              px: 2,
-                              m: 1,
-                              borderRadius: 2,
-                              py: 1,
-                              backgroundColor: notification.seen
-                                ? "#ff9e92"
-                                : "whiteSmoke",
-                            }}
-                          >
-                            <ListItemText>{notification.message}</ListItemText>
-                            <Typography>{notification.date}</Typography>
+                            <ListItemText>
+                              {notification.notificationMessage}
+                            </ListItemText>
+                            <Typography>{`${notification.createdAt}`}</Typography>
                           </Box>
                         );
                       })}
